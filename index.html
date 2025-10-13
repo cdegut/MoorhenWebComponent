@@ -7,11 +7,44 @@
         <title>TypeScript Vite App</title>
     </head>
     <body>
-        <div id="app">
-            <h1>Hello TypeScript + Vite!</h1>
-            <div id="counter"></div>
+        <h1>TypeScript + Vite! Minimal Moorhen WebComponent</h1>
+
+        <!-- Counter Section -->
+        <div
+            id="counter-section"
+            style="margin: 20px 0; padding: 20px; border: 1px solid #ccc; border-radius: 5px; width: fit-content"
+        >
+            <h2>Control</h2>
+            <div style="display: flex; align-items: center; gap: 10px">
+                <button id="load-7avk">Load 7AVK</button>
+            </div>
         </div>
+
         <script type="module" src="/src/main.ts"></script>
-        <my-moorhen width="800" height="600"></my-moorhen>
+        <moorhen-loader />
+        <script id="MathJax-script" defer src="/mathjax/tex-svg.js"></script>
+        <script>
+            window.onload = async () => {
+                window.MathJax = MathJax;
+
+                //This is a dummy render with MathJax which seems to be necessary to make sure that \color works
+                //properly with loaded sessions.
+                const input = String.raw`{\displaystyle \sum_{i}^{\infty} \Pi{\sqrt{\pi}\sqrt{\pi}}{\color{blue}Hello}}`;
+                const output = document.getElementById("mathjaxout");
+                output.innerHTML = "";
+                output.style.width = "0";
+                output.style.height = "0";
+                output.style.display = "none";
+                let options = MathJax.getMetricsFor(output);
+                options.display = false;
+                const node = await MathJax.tex2svgPromise(input, options);
+                if (node) {
+                    const svg = node.getElementsByTagName("svg");
+                }
+            };
+        </script>
+        <div style="border: 1px solid green; width: 1002px; height: 802px; display: flex; flex-direction: row">
+            <my-moorhen id="moorhen-1" width="1000" height="800"></my-moorhen>
+        </div>
     </body>
 </html>

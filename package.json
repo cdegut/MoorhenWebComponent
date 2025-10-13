@@ -4,14 +4,22 @@
     "version": "0.0.0",
     "type": "module",
     "scripts": {
-        "dev": "vite",
-        "build": "tsc && vite build",
+        "start": "vite",
+        "build": "cp -a node_modules/moorhen/public/* public/; cp -r node_modules/moorhen/public/baby-gru/moorhen.css ./src/; tsc && vite build",
         "preview": "vite preview"
     },
     "devDependencies": {
+        "@reduxjs/toolkit": "^2.9.0",
         "@types/node": "^20.5.1",
+        "moorhen": "file:///home/clement/Moorhen/baby-gru/dist/moorhen-0.23.0-dev.tgz",
+        "react-redux": "^9.2.0",
         "typescript": "^5.0.2",
-        "vite": "^4.4.5",
-        "moorhen": "file:///home/clement/Moorhen/baby-gru/dist/moorhen-0.23.0-dev.tgz"
+        "vite": "^4.4.5"
+    },
+    "dependencies": {
+        "@types/react": "^19.2.2",
+        "@types/react-dom": "^19.2.1",
+        "react": "19.2.0",
+        "react-dom": "19.2.0"
     }
 }

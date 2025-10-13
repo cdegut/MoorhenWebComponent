@@ -1,3 +1,6 @@
 
 .vscode/*
 dist/*
+public/*
+node_modules
+.buildMoorhenWebApp.sh

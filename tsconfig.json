@@ -6,18 +6,18 @@
         "module": "ESNext",
         "skipLibCheck": true,
 
-        /* Bundler mode */
         "moduleResolution": "bundler",
         "allowImportingTsExtensions": true,
         "resolveJsonModule": true,
         "isolatedModules": true,
         "noEmit": true,
 
-        /* Linting */
         "strict": true,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "noFallthroughCasesInSwitch": true
+        "noUnusedLocals": false,
+        "noImplicitAny": false,
+        "noUnusedParameters": false,
+        "noFallthroughCasesInSwitch": true,
+        "jsx": "react-jsx"
     },
     "include": ["src"]
 }
