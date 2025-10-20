@@ -1,23 +1,12 @@
-import * as ReactRedux from "react-redux";
-import * as React from "react";
-import * as ReactDOM from "react-dom";
-import * as ReactDOMClient from "react-dom/client";
-import { MoorhenWebComponent, MoorhenMolecule, addMolecule } from "moorhen";
-
-(window as any).ReactRedux = ReactRedux;
-(window as any).React = React;
-(window as any).ReactDOM = { ...ReactDOM, ...ReactDOMClient };
+import { MoorhenWebComponentNoReact, MoorhenMolecule, addMolecule } from "moorhen";
 
 const baseUrl = "https://www.ebi.ac.uk/pdbe/entry-files";
-
-class MyMoorhen extends MoorhenWebComponent {
+class MyMoorhen extends MoorhenWebComponentNoReact {
     // custom Moorhen functions
 
     async loadPDB(pdbCode: string) {
         console.log(this.moorhenInstanceRef.current);
         await this.fetchMolecule(`${baseUrl}/download/${pdbCode}.cif`, pdbCode);
-        // await fetchMap(${baseUrl}/${pdbCode}_diff.ccp4, ${pdbCode}-FoFc, true)
-        // await fetchMap(${baseUrl}/${pdbCode}.ccp4, ${pdbCode}-2FoFc)
     }
 
     async fetchMolecule(url: string, molName: string) {

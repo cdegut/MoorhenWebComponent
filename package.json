@@ -5,7 +5,7 @@
     "type": "module",
     "scripts": {
         "start": "vite",
-        "build": "cp -a node_modules/moorhen/public/* public/; cp -r node_modules/moorhen/public/baby-gru/moorhen.css ./src/; tsc && vite build",
+        "build": "mkdir public; cp -a node_modules/moorhen/public/* public/; tsc && vite build",
         "preview": "vite preview"
     },
     "devDependencies": {

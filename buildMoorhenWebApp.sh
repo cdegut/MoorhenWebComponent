@@ -30,10 +30,7 @@ echo "Building release..."
 # npm run build-release || error_exit "Failed to build release"
 
 # echo "Building development version..."
-npm run prebuild  
-npx webpack --mode production --devtool inline-source-map
-npm run dts-bundle 
-./fix_old_namespace.sh
+npm run build-webcomponent
 # npm run build-release-dev || error_exit "Failed to build release"
 success_msg "Development build completed"
 
