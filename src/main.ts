@@ -1,8 +1,54 @@
 import { MoorhenWebComponentNoReact, MoorhenMolecule, addMolecule } from "moorhen";
+import type { MainMenuEntrySubMenu, SubMenuMap } from "moorhen";
 
 const baseUrl = "https://www.ebi.ac.uk/pdbe/entry-files";
+const extraMainMenu: MainMenuEntrySubMenu = {
+    type: "sub-menu",
+    label: "Extra Menu",
+    icon: "MUISymbolDownload",
+    menu: "extra-menu",
+    align: 5,
+};
+
+const extraMenu: SubMenuMap = {
+    "extra-menu": {
+        label: "Extra",
+        items: [
+            {
+                id: "extra-menu-1",
+                type: "item",
+                label: "Load 1BXN",
+                onClick: () => {
+                    moorhen1.loadPDB("1bxn");
+                },
+            },
+            {
+                id: "extra-menu-2",
+                type: "item",
+                label: "Do something...",
+                onClick: () => {},
+            },
+            {
+                id: "extra-menu-3",
+                type: "item",
+                label: "Do something...",
+                onClick: () => {},
+            },
+        ],
+    },
+};
+
 class MyMoorhen extends MoorhenWebComponentNoReact {
-    // custom Moorhen functions
+    constructor() {
+        super();
+        this.urlPrefix = "baby-gru";
+    }
+
+    public onInnit = () => {
+        const menuSystem = this.moorhenMenuSystemRef.current!;
+        menuSystem.addMainMenu(extraMainMenu, 2);
+        menuSystem.addSubmenu(extraMenu);
+    };
 
     async loadPDB(pdbCode: string) {
         console.log(this.moorhenInstanceRef.current);
@@ -15,8 +61,7 @@ class MyMoorhen extends MoorhenWebComponentNoReact {
         const monomerLibraryPath = this.moorhenInstanceRef!.current!.paths.monomerLibraryPath;
         const commandCentre = this.moorhenInstanceRef!.current!.getCommandCentreRef();
         const newMolecule = new MoorhenMolecule(commandCentre, store, monomerLibraryPath);
-        //newMolecule.setBackgroundColour(this.backgroundColor);
-        //newMolecule.defaultBondOptions.smoothness = this.defaultBondSmoothness;
+
         try {
             await newMolecule.loadToCootFromURL(url, molName);
             if (newMolecule.molNo === -1) {
@@ -37,7 +82,6 @@ class MyMoorhen extends MoorhenWebComponentNoReact {
 customElements.define("my-moorhen", MyMoorhen);
 
 const moorhen1 = document.getElementById("moorhen-1") as MyMoorhen;
-const moorhenInstance = moorhen1.moorhenInstanceRef.current;
 
 function load7avk(): void {
     moorhen1.loadPDB("7avk");
