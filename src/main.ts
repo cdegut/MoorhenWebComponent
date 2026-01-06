@@ -1,11 +1,12 @@
-import { MoorhenWebComponentNoReact, MoorhenMolecule, addMolecule } from "moorhen";
+import { MoorhenWebComponent, MoorhenMolecule, addMolecule } from "moorhen";
 import type { MainMenuEntrySubMenu, SubMenuMap } from "moorhen";
 
 const baseUrl = "https://www.ebi.ac.uk/pdbe/entry-files";
+
 const extraMainMenu: MainMenuEntrySubMenu = {
     type: "sub-menu",
     label: "Extra Menu",
-    icon: "MUISymbolDownload",
+    icon: "MatSymDownload",
     menu: "extra-menu",
     align: 5,
 };
@@ -38,28 +39,22 @@ const extraMenu: SubMenuMap = {
     },
 };
 
-class MyMoorhen extends MoorhenWebComponentNoReact {
+class MyMoorhen extends MoorhenWebComponent {
     constructor() {
         super();
-        this.urlPrefix = "baby-gru";
     }
 
     public onInnit = () => {
-        const menuSystem = this.moorhenMenuSystemRef.current!;
+        const menuSystem = this.moorhenInstance.getMenuSystem();
         menuSystem.addMainMenu(extraMainMenu, 2);
         menuSystem.addSubmenu(extraMenu);
     };
 
-    async loadPDB(pdbCode: string) {
-        console.log(this.moorhenInstanceRef.current);
-        await this.fetchMolecule(`${baseUrl}/download/${pdbCode}.cif`, pdbCode);
-    }
-
     async fetchMolecule(url: string, molName: string) {
-        const dispatch = this.moorhenInstanceRef!.current!.getDispatch();
-        const store = this.moorhenInstanceRef!.current!.getStore();
-        const monomerLibraryPath = this.moorhenInstanceRef!.current!.paths.monomerLibraryPath;
-        const commandCentre = this.moorhenInstanceRef!.current!.getCommandCentreRef();
+        const dispatch = this.moorhenInstance.getDispatch();
+        const store = this.moorhenInstance.getStore();
+        const monomerLibraryPath = this.moorhenInstance.paths.monomerLibraryPath;
+        const commandCentre = this.moorhenInstance.getCommandCentreRef();
         const newMolecule = new MoorhenMolecule(commandCentre, store, monomerLibraryPath);
 
         try {
@@ -76,6 +71,10 @@ class MyMoorhen extends MoorhenWebComponentNoReact {
             console.warn(err);
             console.warn(`Cannot fetch PDB entry from ${url}, doing nothing...`);
         }
+    }
+
+    async loadPDB(pdbCode: string) {
+        await this.fetchMolecule(`${baseUrl}/download/${pdbCode}.cif`, pdbCode);
     }
 }
 
