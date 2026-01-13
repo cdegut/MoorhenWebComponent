@@ -2,8 +2,15 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
-        <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link
+            rel="icon"
+            type="image/svg+xml"
+            href="/vite.svg"
+        />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+        />
         <title>TypeScript Vite App</title>
     </head>
     <body>
@@ -19,31 +26,21 @@
                 <button id="load-7avk">Load 7AVK</button>
             </div>
         </div>
-
-        <script type="module" src="/src/main.ts"></script>
-        <script id="MathJax-script" defer src="/mathjax/tex-svg.js"></script>
-        <script>
-            window.onload = async () => {
-                window.MathJax = MathJax;
-
-                //This is a dummy render with MathJax which seems to be necessary to make sure that \color works
-                //properly with loaded sessions.
-                const input = String.raw`{\displaystyle \sum_{i}^{\infty} \Pi{\sqrt{\pi}\sqrt{\pi}}{\color{blue}Hello}}`;
-                const output = document.getElementById("mathjaxout");
-                output.innerHTML = "";
-                output.style.width = "0";
-                output.style.height = "0";
-                output.style.display = "none";
-                let options = MathJax.getMetricsFor(output);
-                options.display = false;
-                const node = await MathJax.tex2svgPromise(input, options);
-                if (node) {
-                    const svg = node.getElementsByTagName("svg");
-                }
-            };
-        </script>
+        <script
+            type="module"
+            src="/src/main.ts"
+        ></script>
         <div style="border: 1px solid green; width: 1502px; height: 802px; display: flex; flex-direction: row">
-            <my-moorhen id="moorhen-1" width="1000" height="800"></my-moorhen>
+            <my-moorhen
+                id="moorhen-1"
+                width="1000"
+                height="800"
+            ></my-moorhen>
+            <my-moorhen
+                id="moorhen-1"
+                width="500"
+                height="800"
+            ></my-moorhen>
         </div>
     </body>
 </html>
