@@ -44,8 +44,9 @@ class MyMoorhen extends MoorhenWebComponent {
         super();
     }
 
-    public onInnit = () => {
+    public onInit = () => {
         const menuSystem = this.moorhenInstance.getMenuSystem();
+        console.log("!!");
         menuSystem.addMainMenu(extraMainMenu, 2);
         menuSystem.addSubmenu(extraMenu);
     };

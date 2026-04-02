@@ -1,4 +1,5 @@
 import { defineConfig } from "vite";
+import { copyMoorhenAssetsToPublic } from "moorhen/vite-plugin";
 
 export default defineConfig({
     server: {
