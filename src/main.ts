@@ -1,5 +1,6 @@
 import { MoorhenWebComponent, MoorhenMolecule, addMolecule } from "moorhen";
 import type { MainMenuEntrySubMenu, SubMenuMap } from "moorhen";
+import "./styles.css";
 
 const baseUrl = "https://www.ebi.ac.uk/pdbe/entry-files";
 
@@ -20,7 +21,7 @@ const extraMenu: SubMenuMap = {
                 type: "item",
                 label: "Load 1BXN",
                 onClick: () => {
-                    moorhen1.loadPDB("1bxn");
+                    customMoorhen?.loadPDB("1bxn");
                 },
             },
             {
@@ -46,7 +47,6 @@ class MyMoorhen extends MoorhenWebComponent {
 
     public onInit = () => {
         const menuSystem = this.moorhenInstance.getMenuSystem();
-        console.log("!!");
         menuSystem.addMainMenu(extraMainMenu, 2);
         menuSystem.addSubmenu(extraMenu);
     };
@@ -81,10 +81,10 @@ class MyMoorhen extends MoorhenWebComponent {
 
 customElements.define("my-moorhen", MyMoorhen);
 
-const moorhen1 = document.getElementById("moorhen-1") as MyMoorhen;
+const customMoorhen = document.getElementById("moorhen-2") as MyMoorhen | null;
 
 function load7avk(): void {
-    moorhen1.loadPDB("7avk");
+    customMoorhen?.loadPDB("7avk");
 }
 const loadButton = document.getElementById("load-7avk");
 loadButton?.addEventListener("click", load7avk);

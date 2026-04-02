@@ -11,36 +11,54 @@
             name="viewport"
             content="width=device-width, initial-scale=1.0"
         />
-        <title>TypeScript Vite App</title>
+        <title>Moorhen Web Component Demo</title>
     </head>
     <body>
-        <h1>TypeScript + Vite! Minimal Moorhen WebComponent</h1>
+        <main class="container">
+            <section class="hero">
+                <h1>Moorhen as a Web Component</h1>
+                <p>
+                    This demo shows two ways to use Moorhen: directly with
+                    <strong>&lt;moorhen-web-component/&gt;</strong>, and by extending
+                    <strong>MoorhenWebComponent</strong> to add custom actions.
+                </p>
+            </section>
 
-        <!-- Counter Section -->
-        <div
-            id="counter-section"
-            style="margin: 20px 0; padding: 20px; border: 1px solid #ccc; border-radius: 5px; width: fit-content"
-        >
-            <h2>Control</h2>
-            <div style="display: flex; align-items: center; gap: 10px">
-                <button id="load-7avk">Load 7AVK</button>
-            </div>
-        </div>
+            <section class="demo-grid">
+                <article class="card">
+                    <div class="card-header">
+                        <h2>1) Default Component</h2>
+                        <p>Use Moorhen directly in HTML without extra app code.</p>
+                        <pre class="snippet">import { MoorhenWebComponent } from "moorhen"</pre>
+                    </div>
+                    <moorhen-web-component
+                        id="moorhen-1"
+                        width="1000"
+                        height="800"
+                    />
+                </article>
+
+                <article class="card">
+                    <div class="card-header">
+                        <h2>2) Custom Extended Component</h2>
+                        <p>Extend the class to inject extra menu entries and expose custom controls.</p>
+                        <pre class="snippet">class MyMoorhen extends MoorhenWebComponent { ... }</pre>
+                        <div class="controls">
+                            <button id="load-7avk">Load 7AVK</button>
+                        </div>
+                    </div>
+                    <my-moorhen
+                        id="moorhen-2"
+                        width="1000"
+                        height="800"
+                    ></my-moorhen>
+                </article>
+            </section>
+        </main>
+
         <script
             type="module"
             src="/src/main.ts"
         ></script>
-        <div style="border: 1px solid green; width: 1002px; height: 802px; display: flex; flex-direction: row">
-            <my-moorhen
-                id="moorhen-1"
-                width="1000"
-                height="800"
-            ></my-moorhen>
-            <!-- <my-moorhen
-                id="moorhen-1"
-                width="500"
-                height="800"
-            ></my-moorhen> -->
-        </div>
     </body>
 </html>

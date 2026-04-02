@@ -1,0 +1,115 @@
+:root {
+    color-scheme: light;
+    --page-bg: #f6f7fb;
+    --card-bg: #ffffff;
+    --text: #182033;
+    --muted: #5f6b85;
+    --border: #d9dfec;
+    --accent: #2b5cff;
+    --accent-hover: #1f4be0;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: "Segoe UI", "Trebuchet MS", sans-serif;
+    color: var(--text);
+    background: linear-gradient(180deg, #f8faff 0%, var(--page-bg) 100%);
+}
+
+.container {
+    width: min(1980px, 95vw);
+    margin: 0 auto;
+    padding: 24px 0 32px;
+}
+
+.hero {
+    margin-bottom: 18px;
+    padding: 20px 22px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--card-bg);
+}
+
+.hero h1 {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 700;
+}
+
+.hero p {
+    margin: 10px 0 0;
+    color: var(--muted);
+    line-height: 1.45;
+}
+
+.demo-grid {
+    display: grid;
+    gap: 18px;
+    grid-template-columns: 1fr;
+}
+
+.card {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--card-bg);
+    padding: 14px;
+    overflow: auto;
+}
+
+.card-header {
+    padding: 4px 6px 12px;
+}
+
+.card h2 {
+    margin: 0;
+    font-size: 1.05rem;
+}
+
+.card p {
+    margin: 8px 0;
+    color: var(--muted);
+}
+
+.snippet {
+    margin: 0;
+    padding: 8px 10px;
+    border-radius: 8px;
+    background: #f3f5fb;
+    border: 1px solid #e6eaf5;
+    color: #2e3956;
+    font-size: 0.88rem;
+    overflow-x: auto;
+}
+
+.controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+
+button {
+    border: 0;
+    border-radius: 8px;
+    background: var(--accent);
+    color: white;
+    padding: 8px 12px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+button:hover {
+    background: var(--accent-hover);
+}
+
+/* Show side-by-side only when there is enough room for both 1000px components. */
+@media (min-width: 2160px) {
+    .demo-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
