@@ -93,7 +93,7 @@ body {
     flex-wrap: wrap;
 }
 
-button {
+.app-button {
     border: 0;
     border-radius: 8px;
     background: var(--accent);
@@ -103,7 +103,7 @@ button {
     cursor: pointer;
 }
 
-button:hover {
+.app-button:hover {
     background: var(--accent-hover);
 }
 

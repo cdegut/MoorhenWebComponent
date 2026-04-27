@@ -2,15 +2,9 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
-        <link
-            rel="icon"
-            type="image/svg+xml"
-            href="/vite.svg"
-        />
-        <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1.0"
-        />
+        <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+        <link rel="stylesheet" href="/src/styles.css" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Moorhen Web Component Demo</title>
     </head>
     <body>
@@ -28,37 +22,30 @@
                 <article class="card">
                     <div class="card-header">
                         <h2>1) Default Component</h2>
-                        <p>Use Moorhen directly in HTML without extra app code.</p>
-                        <pre class="snippet">import { MoorhenWebComponent } from "moorhen"</pre>
+                        <p>Import and register the Moorhen web component:</p>
+                        <pre
+                            class="snippet"
+                        >import { registerMoorhenWebComponent } from "moorhen" <br/>registerMoorhenWebComponent();</pre>
+                        <p>Then use the <strong>&lt;moorhen-web-component/&gt;</strong> tag in your HTML:</p>
                     </div>
-                    <moorhen-web-component
-                        id="moorhen-1"
-                        width="1000"
-                        height="800"
-                    />
-                </article>
-
-                <article class="card">
-                    <div class="card-header">
-                        <h2>2) Custom Extended Component</h2>
-                        <p>Extend the class to inject extra menu entries and expose custom controls.</p>
-                        <pre class="snippet">class MyMoorhen extends MoorhenWebComponent { ... }</pre>
-                        <div class="controls">
-                            <button id="load-7avk">Load 7AVK</button>
-                        </div>
+                    <div class="moorhen-container">
+                        <moorhen-web-component id="moorhen-1" width="1000" height="800" />
                     </div>
-                    <my-moorhen
-                        id="moorhen-2"
-                        width="1000"
-                        height="800"
-                    ></my-moorhen>
+                    <div class="controls">
+                        <p>Moorhen web component can be externally controlled via JavaScript:</p>
+                        <button id="load-7avk" class="app-button">Load 7AVK</button>
+                        <button id="center-residue-1231" class="app-button">Center on Residue 1231</button>
+                    </div>
+                    <div>
+                        <p>And you can listen to events emitted by the component:</p>
+                        <p id="loading-text">Loading status: N/A</p>
+                        <p id="hovered-atom">Hovered atom: N/A</p>
+                        <p id="modified-molecule">Modified molecule: N/A</p>
+                    </div>
                 </article>
             </section>
         </main>
 
-        <script
-            type="module"
-            src="/src/main.ts"
-        ></script>
+        <script type="module" src="/src/main.ts"></script>
     </body>
 </html>
