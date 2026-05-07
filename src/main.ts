@@ -1,5 +1,5 @@
-import { registerMoorhenWebComponent } from "moorhen";
-import type { MainMenuEntrySubMenu, MoorhenWebComponent, SubMenuMap } from "moorhen";
+import { registerMoorhenWebComponent } from "moorhen/web-component";
+import  { MainMenuEntrySubMenu, MoorhenWebComponent, SubMenuMap } from "moorhen/web-component";
 
 // Register the Moorhen web component so it can be used in the HTML
 registerMoorhenWebComponent();
@@ -48,8 +48,8 @@ async function fetchFromPDBe(entryId: string): Promise<
 > {
     const baseUrl = "https://www.ebi.ac.uk/pdbe/entry-files";
     // The loadFiles method can take an array of file URLs and will return an array of objects containing information about the loaded files, including a uniqueID that can be used to reference the molecule or map in other methods
-    const loadingData = await moorhenInstance?.loadFiles([`${baseUrl}/${entryId}.cif`]);
-    moorhenInstance?.loadFiles([`${baseUrl}/${entryId}.ccp4`, `${baseUrl}/${entryId}_diff.ccp4`]);
+    const loadingData = await moorhenInstance?.files.loadFiles([`${baseUrl}/${entryId}.cif`]);
+    moorhenInstance?.files.loadFiles([`${baseUrl}/${entryId}.ccp4`, `${baseUrl}/${entryId}_diff.ccp4`]);
     return loadingData;
 }
 
@@ -92,7 +92,7 @@ const extraMenu: SubMenuMap = {
                 type: "item",
                 label: "Load 1BXN",
                 onClick: () => {
-                    moorhenInstance.loadFiles(`https://www.ebi.ac.uk/pdbe/entry-files/1bxn.cif`);
+                    moorhenInstance.files.loadFiles(`https://www.ebi.ac.uk/pdbe/entry-files/1bxn.cif`);
                 },
             },
             {

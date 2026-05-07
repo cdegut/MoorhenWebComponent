@@ -7,7 +7,7 @@
         "start": "vite",
         "build": "mkdir public; cp -a node_modules/moorhen/public/* public/; tsc && vite build",
         "preview": "vite preview",
-        "rebuild": "rm -rf node_modules/moorhen && rm package-lock.json && npm cache clean --force && npm install && cp -r node_modules/moorhen/public/MoorhenAssets public/. && vite"
+        "rebuild": "rm -rf node_modules/moorhen && rm -f package-lock.json && npm cache clean --force && npm install && cp -r node_modules/moorhen/public/MoorhenAssets public/. && vite"
     },
     "devDependencies": {
         "@types/node": "^20.5.1",
@@ -15,6 +15,6 @@
         "vite": "^7.3.1"
     },
     "dependencies": {
-        "moorhen": "file:///home/clement/Moorhen/baby-gru/dist/moorhen-1.0.0-alpha.0.tgz"
+        "moorhen": "file:///home/clement/Moorhen/baby-gru/dist/moorhen-1.0.0-alpha.3.tgz"
     }
 }
