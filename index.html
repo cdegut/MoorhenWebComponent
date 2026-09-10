@@ -2,50 +2,123 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8" />
-        <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-        <link rel="stylesheet" href="/src/styles.css" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Moorhen Web Component Demo</title>
+        <link rel="stylesheet" href="/src/styles.css" />
     </head>
     <body>
-        <main class="container">
-            <section class="hero">
-                <h1>Moorhen as a Web Component</h1>
-                <p>
-                    This demo shows two ways to use Moorhen: directly with
-                    <strong>&lt;moorhen-web-component/&gt;</strong>, and by extending
-                    <strong>MoorhenWebComponent</strong> to add custom actions.
-                </p>
-            </section>
+        <header class="site-header">
+            <h1>Moorhen as a Web Component</h1>
+            <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark/light mode">
+                Dark mode
+            </button>
+        </header>
 
-            <section class="demo-grid">
-                <article class="card">
-                    <div class="card-header">
-                        <h2>1) Default Component</h2>
-                        <p>Import and register the Moorhen web component:</p>
-                        <pre
-                            class="snippet"
-                        >import { registerMoorhenWebComponent } from "moorhen" <br/>registerMoorhenWebComponent();</pre>
-                        <p>Then use the <strong>&lt;moorhen-web-component/&gt;</strong> tag in your HTML:</p>
-                    </div>
-                    <div class="moorhen-container">
-                        <moorhen-web-component id="moorhen-1" width="1000" height="800" />
-                    </div>
-                    <div class="controls">
-                        <p>Moorhen web component can be externally controlled via JavaScript:</p>
-                        <button id="load-7avk" class="app-button">Load 7AVK</button>
-                        <button id="center-residue-1231" class="app-button">Center on Residue 1231</button>
-                    </div>
-                    <div>
-                        <p>And you can listen to events emitted by the component:</p>
-                        <p id="loading-text">Loading status: N/A</p>
-                        <p id="hovered-atom">Hovered atom: N/A</p>
-                        <p id="modified-molecule">Modified molecule: N/A</p>
-                    </div>
-                </article>
+        <main>
+            <p class="lead">
+                A plain TypeScript page that embeds <code>&lt;moorhen-web-component&gt;</code>, drives it
+                from ordinary DOM code, and listens to what it reports back. No framework involved.
+            </p>
+
+            <section class="card">
+                <h2>Register the element, then wait for it</h2>
+
+                <pre class="code-block" data-lang="typescript"><code>import { registerMoorhenWebComponent } from "moorhen/web-component";
+
+registerMoorhenWebComponent();</code></pre>
+
+                <p>
+                    Then use the tag in your markup. It needs an <code>id</code>, and it takes its size from the
+                    box you put it in:
+                </p>
+
+                <pre class="code-block" data-lang="html"><code>&lt;div class="viewer"&gt;
+    &lt;moorhen-web-component id="moorhen-1"&gt;&lt;/moorhen-web-component&gt;
+&lt;/div&gt;</code></pre>
+
+                <pre class="code-block" data-lang="css"><code>.viewer {
+    display: flex;
+    height: 70vh;   /* the container needs a definite height */
+}</code></pre>
+
+                <p>
+                    The element below is sized that way. It follows its container, so it grows and shrinks with
+                    the window. Setting <code>width</code> and <code>height</code> attributes instead gives it a
+                    fixed size.
+                </p>
+
+                <div class="viewer">
+                    <moorhen-web-component id="moorhen-1">
+                        <div slot="page-controls" class="slot-controls">
+                            <button id="slot-load-1bxn" class="button">Load 1BXN</button>
+                            <button id="slot-toggle-theme" class="button">Toggle theme</button>
+                        </div>
+                    </moorhen-web-component>
+                </div>
+
+                <p>
+                    Click <strong>Load 7AVK</strong> to fetch that structure and its maps from PDBe, then
+                    <strong>Center on Residue 1231</strong> to move the camera:
+                </p>
+
+                <div class="controls">
+                    <button id="load-7avk" class="button">Load 7AVK</button>
+                    <button id="center-residue-1231" class="button">Center on Residue 1231</button>
+                </div>
+
+                <div class="readouts note-technical">
+                    <p id="loading-text">Loading status: N/A</p>
+                    <p id="hovered-atom">Hovered atom: N/A</p>
+                    <p id="last-load">Last load: N/A</p>
+                    <p id="modified-molecule">Modified molecule: N/A</p>
+                </div>
+
+                <p>
+                    Those four lines are live. The demo subscribes to the molecule list, to atom-hover events,
+                    to file loading and to molecule changes, and writes whatever it receives into them.
+                </p>
+
+                <p class="note">
+                    Loading a file updates the first and third lines: the count comes from the store, and the
+                    files-loaded callback reports the file names together with the optional <code>origin</code>
+                    label you pass to <code>loadFiles()</code>. The last line comes from the molecule-change
+                    callback, which also fires for edits you make in the viewer (mutate, refine, delete, and so
+                    on) and sometimes during loading, without an action and before the molecule is listed.
+                </p>
+
+                <p>
+                    The menu bar is extended in two ways. An <em>Extra Menu</em> entry gets its own submenu, and a
+                    <em>Page controls</em> entry whose only item is an HTML slot: the slot is filled by markup
+                    placed inside the <code>&lt;moorhen-web-component&gt;</code> element, so those buttons are
+                    ordinary page DOM, styled by this page&rsquo;s CSS.
+                </p>
+
+                <pre class="code-block" data-lang="html"><code>&lt;moorhen-web-component id="moorhen-1"&gt;
+    &lt;div slot="page-controls" class="slot-controls"&gt;
+        &lt;button id="slot-load-1bxn"&gt;Load 1BXN&lt;/button&gt;
+        &lt;button id="slot-toggle-theme"&gt;Toggle theme&lt;/button&gt;
+    &lt;/div&gt;
+&lt;/moorhen-web-component&gt;</code></pre>
+
+                <p class="note">
+                    <strong>Serving the page:</strong> Moorhen needs a cross-origin isolated page, and
+                    <code>vite.config.ts</code> already sets the two required headers for the dev server.
+                    Check <code>window.crossOriginIsolated</code> in the console: it must be
+                    <code>true</code>.
+                </p>
+
+                <p>
+                    See <code>src/main.ts</code> for the whole walkthrough, and the
+                    <a
+                        href="https://moorhen.hosted.york.ac.uk/docs/guides/developer/webcomponent-setup.html"
+                        >developer guide</a
+                    >
+                    for the same steps explained in prose.
+                </p>
             </section>
         </main>
 
+        <script type="module" src="/src/theme-toggle.ts"></script>
         <script type="module" src="/src/main.ts"></script>
     </body>
 </html>

@@ -1,5 +1,6 @@
 import { registerMoorhenWebComponent } from "moorhen/web-component";
 import  { MainMenuEntrySubMenu, MoorhenWebComponent, SubMenuMap } from "moorhen/web-component";
+import { THEME_BACKGROUNDS, currentTheme, onThemeChange, toggleTheme, type Theme } from "./theme-toggle";
 
 // Register the Moorhen web component so it can be used in the HTML
 registerMoorhenWebComponent();
@@ -29,14 +30,27 @@ moorhenInstance.newAtomHoveredCallback((moleculeID, residueNumber, atomName) => 
     }
 });
 
-// Subscribe to molecule modification events and update the modified molecule text accordingly
-moorhenInstance.newMoleculeChangedCallback((moleculeID) => {
+// Subscribe to molecule modification events and update the modified molecule text accordingly.
+// The action is optional: some internal paths report a change without one, and the
+// callback can arrive before the molecule is listed, so the name may not resolve yet.
+moorhenInstance.newMoleculeChangedCallback((moleculeID, action) => {
     const modifiedMoleculeText = document.getElementById("modified-molecule");
-    const molName = moorhenInstance.getMolecule(moleculeID)?.name || moleculeID;
+    const molName = moorhenInstance.getMolecule(moleculeID)?.name || `molecule ${moleculeID.slice(0, 8)}`;
     if (modifiedMoleculeText) {
-        modifiedMoleculeText.textContent = `Modified molecule: ${molName}`;
+        modifiedMoleculeText.textContent = `Modified molecule: ${molName}${action ? ` (${action})` : ""}`;
     }
 });
+
+// Subscribe to file loading events and update the last load text accordingly. The
+// second argument is the optional "origin" label passed to loadFiles().
+moorhenInstance.files.newFilesLoadedCallback((files, origin) => {
+    const lastLoadText = document.getElementById("last-load");
+    if (lastLoadText) {
+        const names = files.map((file) => file.fileName).join(", ");
+        lastLoadText.textContent = `Last load: ${names} (from "${origin}")`;
+    }
+});
+
 // wrapper function to fetch files from PDBe and load them into the component
 async function fetchFromPDBe(entryId: string): Promise<
     {
@@ -48,8 +62,8 @@ async function fetchFromPDBe(entryId: string): Promise<
 > {
     const baseUrl = "https://www.ebi.ac.uk/pdbe/entry-files";
     // The loadFiles method can take an array of file URLs and will return an array of objects containing information about the loaded files, including a uniqueID that can be used to reference the molecule or map in other methods
-    const loadingData = await moorhenInstance?.files.loadFiles([`${baseUrl}/${entryId}.cif`]);
-    moorhenInstance?.files.loadFiles([`${baseUrl}/${entryId}.ccp4`, `${baseUrl}/${entryId}_diff.ccp4`]);
+    const loadingData = await moorhenInstance?.files.loadFiles([`${baseUrl}/${entryId}.cif`], "PDBe structure");
+    moorhenInstance?.files.loadFiles([`${baseUrl}/${entryId}.ccp4`, `${baseUrl}/${entryId}_diff.ccp4`], "PDBe maps");
     return loadingData;
 }
 
@@ -76,12 +90,13 @@ centerButton?.addEventListener("click", () => {
 const extraMainMenu: MainMenuEntrySubMenu = {
     type: "sub-menu",
     label: "Extra Menu",
-    icon: "MatSymDownload",
+    icon: "MatSymExperiment",
     menu: "extra-menu",
     align: 5,
 };
 
-moorhenInstance.menuSystem.addMainMenu(extraMainMenu, 2);
+
+moorhenInstance?.menuSystem?.addMainMenu(extraMainMenu, 2);
 
 const extraMenu: SubMenuMap = {
     "extra-menu": {
@@ -92,7 +107,10 @@ const extraMenu: SubMenuMap = {
                 type: "item",
                 label: "Load 1BXN",
                 onClick: () => {
-                    moorhenInstance.files.loadFiles(`https://www.ebi.ac.uk/pdbe/entry-files/1bxn.cif`);
+                    moorhenInstance.files.loadFiles(
+                        `https://www.ebi.ac.uk/pdbe/entry-files/1bxn.cif`,
+                        "Extra menu",
+                    );
                 },
             },
             {
@@ -111,4 +129,56 @@ const extraMenu: SubMenuMap = {
     },
 };
 
-moorhenInstance.menuSystem.addSubmenu(extraMenu);
+moorhenInstance?.menuSystem?.addSubmenu(extraMenu);
+
+// =============================================================================
+// Example of a second main menu whose only item is an HTML slot. The slot is
+// filled by markup in index.html, placed inside the <moorhen-web-component>
+// element: those elements stay in the page DOM, so the page stylesheet applies
+// to them and they are wired up like any other button.
+
+const slotMainMenu: MainMenuEntrySubMenu = {
+    type: "sub-menu",
+    label: "Page controls",
+    ariaLabel: "Page controls",
+    icon: "MatSymTune",
+    menu: "page-controls-menu",
+    align: 5,
+};
+
+moorhenInstance?.menuSystem?.addMainMenu(slotMainMenu, 3);
+
+const slotMenu: SubMenuMap = {
+    "page-controls-menu": {
+        label: "Page controls",
+        items: [
+            {
+                id: "page-controls-slot",
+                type: "HTMLslot",
+                label: "Page controls",
+                slotName: "page-controls",
+            },
+        ],
+    },
+};
+
+moorhenInstance?.menuSystem?.addSubmenu(slotMenu);
+
+// Both of these buttons live in the slot, in the page markup.
+document.getElementById("slot-load-1bxn")?.addEventListener("click", () => {
+    moorhenInstance.files.loadFiles("https://www.ebi.ac.uk/pdbe/entry-files/1bxn.cif", "Slot menu");
+});
+
+document.getElementById("slot-toggle-theme")?.addEventListener("click", toggleTheme);
+
+// =============================================================================
+// Example of tying the 3D viewport to the page theme. The palette lives in
+// theme-toggle.ts, together with the light/dark state itself, so all we do
+// here is apply the current value and then follow every later change.
+
+const applyThemeBackground = (theme: Theme): void => {
+    moorhenInstance.sceneSettings.setBackgroundColor(THEME_BACKGROUNDS[theme]);
+};
+
+applyThemeBackground(currentTheme());
+onThemeChange(applyThemeBackground);

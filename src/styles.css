@@ -1,115 +1,252 @@
+/* ---------------------------------------------------------------------------
+   Design tokens and components copied from the Moorhen documentation site
+   (https://moorhen.hosted.york.ac.uk/docs/) so the demo pages look the same.
+   Every colour is declared once with light-dark(); the active color-scheme
+   decides which of the two values applies.
+   --------------------------------------------------------------------------- */
+
 :root {
-    color-scheme: light;
-    --page-bg: #f6f7fb;
-    --card-bg: #ffffff;
-    --text: #182033;
-    --muted: #5f6b85;
-    --border: #d9dfec;
-    --accent: #2b5cff;
-    --accent-hover: #1f4be0;
+    color-scheme: light dark;
+
+    --bg: light-dark(#fff, #1b1e22);
+    --text: light-dark(#2b2b2b, #dcdcdc);
+    --border: light-dark(#ddd, #3a3f45);
+    --border-light: light-dark(#eee, #2c3035);
+    --link: light-dark(#34495e, #8fb3d9);
+    --heading-link: light-dark(#2c3e50, #a9c6e8);
+    --card-bg: light-dark(#fff, #24282d);
+    --button-bg: light-dark(#2c3e50, #3a6ea5);
+    --button-bg-hover: light-dark(#1a252f, #4c85c1);
+    --button-text: #fff; /* identical in both themes */
+    --note-bg: light-dark(#fff8e1, #3a3320);
+    --note-border: light-dark(#ffe08a, #7a6a2e);
+    --note-tech-bg: light-dark(#e8f1fb, #1d2b3a);
+    --note-tech-border: light-dark(#9ec4e6, #4a7ba6);
+    --code-bg: light-dark(#f6f8fa, #262b31);
+    --code-border: light-dark(#dfe3e8, #3a3f45);
+    --code-text: light-dark(#2b2b2b, #d6dde5);
+    --code-label-bg: light-dark(#eceff2, #2b3138);
+    --code-label-text: light-dark(#5b6570, #9aa7b4);
+    --code-cli-accent: light-dark(#1a7f37, #3fb950);
+    --code-ts-accent: light-dark(#0969da, #58a6ff);
+
+    --mono: ui-monospace, "SF Mono", "Cascadia Mono", "Segoe UI Mono", Consolas, "Liberation Mono",
+        Menlo, monospace;
 }
 
-* {
-    box-sizing: border-box;
+/* Forced theme, set by src/theme-toggle.ts. */
+:root[data-theme="dark"] {
+    color-scheme: dark;
 }
+
+:root[data-theme="light"] {
+    color-scheme: light;
+}
+
+/* ---------- page ---------- */
 
 body {
-    margin: 0;
-    font-family: "Segoe UI", "Trebuchet MS", sans-serif;
+    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     color: var(--text);
-    background: linear-gradient(180deg, #f8faff 0%, var(--page-bg) 100%);
-}
-
-.container {
-    width: min(1980px, 95vw);
+    background: var(--bg);
+    max-width: 1120px;
     margin: 0 auto;
-    padding: 24px 0 32px;
+    padding: 0 1.5rem 3rem;
+    line-height: 1.6;
 }
 
-.hero {
-    margin-bottom: 18px;
-    padding: 20px 22px;
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    background: var(--card-bg);
+header.site-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2rem;
 }
 
-.hero h1 {
-    margin: 0;
+header.site-header h1 {
     font-size: 1.4rem;
-    font-weight: 700;
+    margin: 0;
 }
 
-.hero p {
-    margin: 10px 0 0;
-    color: var(--muted);
-    line-height: 1.45;
+.theme-toggle {
+    margin-left: auto;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--card-bg);
+    color: var(--text);
+    cursor: pointer;
+    font: inherit;
 }
 
-.demo-grid {
-    display: grid;
-    gap: 18px;
-    grid-template-columns: 1fr;
+.theme-toggle:hover {
+    border-color: var(--link);
 }
+
+.lead {
+    font-size: 1.05rem;
+    margin-top: 0;
+}
+
+/* ---------- cards, buttons and notes ---------- */
 
 .card {
     border: 1px solid var(--border);
-    border-radius: 14px;
+    border-radius: 8px;
+    padding: 1.25rem;
     background: var(--card-bg);
-    padding: 14px;
-    overflow: auto;
-}
-
-.card-header {
-    padding: 4px 6px 12px;
+    margin-bottom: 1.5rem;
 }
 
 .card h2 {
-    margin: 0;
-    font-size: 1.05rem;
+    margin-top: 0;
+    color: var(--heading-link);
 }
 
 .card p {
-    margin: 8px 0;
-    color: var(--muted);
+    margin: 0.85rem 0;
 }
 
-.snippet {
-    margin: 0;
-    padding: 8px 10px;
+a.button,
+button.button {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border: 0;
+    border-radius: 6px;
+    background: var(--button-bg);
+    color: var(--button-text);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    font-family: inherit;
+    cursor: pointer;
+}
+
+a.button:hover,
+button.button:hover {
+    background: var(--button-bg-hover);
+}
+
+.note {
+    background: var(--note-bg);
+    border: 1px solid var(--note-border);
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+}
+
+.note-technical {
+    background: var(--note-tech-bg);
+    border: 1px solid var(--note-tech-border);
+    border-left: 4px solid var(--note-tech-border);
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+}
+
+/* ---------- inline code and code blocks ---------- */
+
+code {
+    font-family: var(--mono);
+    font-size: 0.88em;
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 4px;
+    padding: 0.1em 0.35em;
+}
+
+pre.code-block {
+    position: relative;
+    font-family: var(--mono);
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
     border-radius: 8px;
-    background: #f3f5fb;
-    border: 1px solid #e6eaf5;
-    color: #2e3956;
-    font-size: 0.88rem;
+    padding: 1rem 1.15rem;
     overflow-x: auto;
+    font-size: 0.9em;
+    line-height: 1.55;
+    tab-size: 4;
+}
+
+pre.code-block code {
+    display: block;
+    background: none;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    font-size: inherit;
+    color: var(--code-text);
+    white-space: pre;
+}
+
+/* Language label, set per block with data-lang. */
+pre.code-block[data-lang] {
+    padding-top: 2.3rem;
+}
+
+pre.code-block[data-lang]::before {
+    content: attr(data-lang);
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding: 0.35rem 1.15rem;
+    font-size: 0.68rem;
+    line-height: 1.2;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--code-label-text);
+    background: var(--code-label-bg);
+    border-bottom: 1px solid var(--code-border);
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+}
+
+pre.code-block[data-lang="typescript"]::before,
+pre.code-block[data-lang="tsx"]::before {
+    color: var(--code-ts-accent);
+}
+
+pre.code-block[data-lang="shell"]::before {
+    color: var(--code-cli-accent);
+}
+
+/* ---------------------------------------------------------------------------
+   Layout specific to this demo.
+   --------------------------------------------------------------------------- */
+
+/* The element takes its size from this box: it needs a definite height, and
+   the element itself fills it (it sets flex/width on itself). */
+.viewer {
+    display: flex;
+    height: 70vh;
+    min-height: 420px;
+    margin: 1rem 0;
 }
 
 .controls {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-top: 10px;
+    gap: 0.6rem;
     flex-wrap: wrap;
+    margin: 1rem 0;
 }
 
-.app-button {
-    border: 0;
-    border-radius: 8px;
-    background: var(--accent);
-    color: white;
-    padding: 8px 12px;
-    font-weight: 600;
-    cursor: pointer;
+/* Content for the HTML slot in the menu bar. It lives in this page's DOM, not
+   in the element's shadow root, so the page stylesheet applies to it. */
+.slot-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding: 0.4rem;
 }
 
-.app-button:hover {
-    background: var(--accent-hover);
+.slot-controls .button {
+    padding: 0.35rem 0.7rem;
+    font-size: 0.9rem;
 }
 
-/* Show side-by-side only when there is enough room for both 1000px components. */
-@media (min-width: 2160px) {
-    .demo-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
+.readouts p {
+    margin: 0.25rem 0;
+    font-family: var(--mono);
+    font-size: 0.9em;
 }
