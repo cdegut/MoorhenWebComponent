@@ -1,6 +1,8 @@
 import { registerMoorhenWebComponent } from "moorhen/web-component";
 import  { MainMenuEntrySubMenu, MoorhenWebComponent, SubMenuMap } from "moorhen/web-component";
+import type { MoorhenMoleculeSelectElement, MoorhenToggleElement } from "moorhen/web-component";
 import { THEME_BACKGROUNDS, currentTheme, onThemeChange, toggleTheme, type Theme } from "./theme-toggle";
+import { installExamplePlugin } from "./plugin";
 
 // Register the Moorhen web component so it can be used in the HTML
 registerMoorhenWebComponent();
@@ -182,3 +184,19 @@ const applyThemeBackground = (theme: Theme): void => {
 
 applyThemeBackground(currentTheme());
 onThemeChange(applyThemeBackground);
+
+// =============================================================================
+// Example of a plugin: a "Plugin" menu entry opening a modal of its own, whose content is the
+// markup in index.html with slot="example-plugin", built from Moorhen's UI elements. See plugin.ts.
+
+installExamplePlugin(moorhenInstance);
+
+// One of Moorhen's UI elements outside the web component, in the page's own controls
+const spin = document.getElementById("page-spin") as MoorhenToggleElement;
+spin.checked = moorhenInstance.store.getState().sceneSettings.doSpin;
+moorhenInstance.subscribeToStore(s => s.sceneSettings.doSpin, doSpin => (spin.checked = doSpin));
+spin.addEventListener("change", () => moorhenInstance.sceneSettings.setDoSpin(spin.checked));
+
+// Another one: the molecules loaded in Moorhen; picking one centres the view on it
+const centreOn = document.getElementById("page-molecule") as MoorhenMoleculeSelectElement;
+centreOn.addEventListener("change", () => moorhenInstance.getMolecule(centreOn.value ?? "")?.centreOn());

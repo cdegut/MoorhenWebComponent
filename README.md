@@ -26,6 +26,8 @@ single custom element, which you then drive from your own JavaScript:
 | Follow the page theme | `moorhenInstance.sceneSettings.setBackgroundColor(...)` |
 | Size to a container | no `width`/`height` attributes: the element fills the box it is placed in |
 | Put your own UI in the menu | an `HTMLslot` menu item, plus markup inside the element with a matching `slot` attribute |
+| Add a plugin: a modal of your own | `moorhenInstance.uiExtensions.addModal({ slotName })`, a `modal` main menu entry, and markup in that slot (`src/plugin.ts`) |
+| Use Moorhen's own controls | `<moorhen-toggle>`, `<moorhen-slider>`, `<moorhen-molecule-select>`, `<moorhen-chain-select for="…">`… in the slot, wired with `addEventListener` and `subscribeToStore` |
 
 The page has two buttons (**Load 7AVK**, **Center on Residue 1231**) and four readouts that the
 callbacks keep up to date: loading status, hovered atom, last load (with its `origin` label) and last

@@ -1,124 +1,246 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Moorhen Web Component Demo</title>
-        <link rel="stylesheet" href="/src/styles.css" />
-    </head>
-    <body>
-        <header class="site-header">
-            <h1>Moorhen as a Web Component</h1>
-            <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark/light mode">
-                Dark mode
-            </button>
-        </header>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Moorhen Web Component Demo</title>
+    <link rel="stylesheet" href="/src/styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <h1>Moorhen as a Web Component</h1>
+      <button
+        id="theme-toggle"
+        class="theme-toggle"
+        aria-label="Toggle dark/light mode"
+      >
+        Dark mode
+      </button>
+    </header>
 
-        <main>
-            <p class="lead">
-                A plain TypeScript page that embeds <code>&lt;moorhen-web-component&gt;</code>, drives it
-                from ordinary DOM code, and listens to what it reports back. No framework involved.
-            </p>
+    <main>
+      <p class="lead">
+        A plain TypeScript page that embeds
+        <code>&lt;moorhen-web-component&gt;</code>, drives it from ordinary DOM
+        code, and listens to what it reports back. No framework involved.
+      </p>
 
-            <section class="card">
-                <h2>Register the element, then wait for it</h2>
+      <section class="card">
+        <h2>Register the element, then wait for it</h2>
 
-                <pre class="code-block" data-lang="typescript"><code>import { registerMoorhenWebComponent } from "moorhen/web-component";
+        <pre
+          class="code-block"
+          data-lang="typescript"
+        ><code>import { registerMoorhenWebComponent } from "moorhen/web-component";
 
 registerMoorhenWebComponent();</code></pre>
 
-                <p>
-                    Then use the tag in your markup. It needs an <code>id</code>, and it takes its size from the
-                    box you put it in:
-                </p>
+        <p>
+          Then use the tag in your markup. It needs an <code>id</code>, and it
+          takes its size from the box you put it in:
+        </p>
 
-                <pre class="code-block" data-lang="html"><code>&lt;div class="viewer"&gt;
+        <pre
+          class="code-block"
+          data-lang="html"
+        ><code>&lt;div class="viewer"&gt;
     &lt;moorhen-web-component id="moorhen-1"&gt;&lt;/moorhen-web-component&gt;
 &lt;/div&gt;</code></pre>
 
-                <pre class="code-block" data-lang="css"><code>.viewer {
+        <pre class="code-block" data-lang="css"><code>.viewer {
     display: flex;
     height: 70vh;   /* the container needs a definite height */
 }</code></pre>
 
-                <p>
-                    The element below is sized that way. It follows its container, so it grows and shrinks with
-                    the window. Setting <code>width</code> and <code>height</code> attributes instead gives it a
-                    fixed size.
-                </p>
+        <p>
+          The element below is sized that way. It follows its container, so it
+          grows and shrinks with the window. Setting <code>width</code> and
+          <code>height</code> attributes instead gives it a fixed size.
+        </p>
 
-                <div class="viewer">
-                    <moorhen-web-component id="moorhen-1">
-                        <div slot="page-controls" class="slot-controls">
-                            <button id="slot-load-1bxn" class="button">Load 1BXN</button>
-                            <button id="slot-toggle-theme" class="button">Toggle theme</button>
-                        </div>
-                    </moorhen-web-component>
-                </div>
+        <div class="viewer">
+          <moorhen-web-component id="moorhen-1">
+            <div slot="page-controls" class="slot-controls">
+              <button id="slot-load-1bxn" class="button">Load 1BXN</button>
+              <button id="slot-toggle-theme" class="button">
+                Toggle theme
+              </button>
+            </div>
+            <!-- The example plugin's modal (see src/plugin.ts) -->
+            <div slot="example-plugin" class="plugin">
+              <moorhen-info-card
+                info="An example plugin: these tools are this page's own markup, shown in a Moorhen modal."
+              ></moorhen-info-card>
+              <moorhen-button
+                id="plugin-load"
+                icon="MatSymAdd"
+                label="Load the tutorial structure"
+              ></moorhen-button>
+              <moorhen-toggle id="plugin-axes">Draw axes</moorhen-toggle>
+              <moorhen-slider
+                id="plugin-zoom"
+                label="Zoom"
+                min="0.05"
+                max="5"
+                scale="log"
+                decimal-places="2"
+              ></moorhen-slider>
+              <moorhen-molecule-select
+                id="plugin-molecule"
+                label="Molecule"
+              ></moorhen-molecule-select>
+              <moorhen-chain-select
+                id="plugin-chains"
+                for="plugin-molecule"
+                multiple
+                label="Chains"
+              ></moorhen-chain-select>
+              <moorhen-button
+                id="plugin-report"
+                label="Report selection"
+                variant="secondary"
+              ></moorhen-button>
+            </div>
+          </moorhen-web-component>
+        </div>
 
-                <p>
-                    Click <strong>Load 7AVK</strong> to fetch that structure and its maps from PDBe, then
-                    <strong>Center on Residue 1231</strong> to move the camera:
-                </p>
+        <p>
+          Click <strong>Load 7AVK</strong> to fetch that structure and its maps
+          from PDBe, then <strong>Center on Residue 1231</strong> to move the
+          camera:
+        </p>
 
-                <div class="controls">
-                    <button id="load-7avk" class="button">Load 7AVK</button>
-                    <button id="center-residue-1231" class="button">Center on Residue 1231</button>
-                </div>
+        <div class="controls">
+          <button id="load-7avk" class="button">Load 7AVK</button>
+          <button id="center-residue-1231" class="button">
+            Center on Residue 1231
+          </button>
+          <!-- Moorhen's UI elements also work outside the web component, in the page -->
+          <moorhen-toggle id="page-spin">Spin</moorhen-toggle>
+          <moorhen-molecule-select
+            id="page-molecule"
+            label="Centre on:"
+          ></moorhen-molecule-select>
+          <moorhen-info-card
+            info="This switch is one of Moorhen's UI elements, placed in the page rather than inside Moorhen: with a single Moorhen in the page it finds it by itself (with several, give its id in a moorhen attribute)."
+          ></moorhen-info-card>
+        </div>
 
-                <div class="readouts note-technical">
-                    <p id="loading-text">Loading status: N/A</p>
-                    <p id="hovered-atom">Hovered atom: N/A</p>
-                    <p id="last-load">Last load: N/A</p>
-                    <p id="modified-molecule">Modified molecule: N/A</p>
-                </div>
+        <div class="readouts note-technical">
+          <p id="loading-text">Loading status: N/A</p>
+          <p id="hovered-atom">Hovered atom: N/A</p>
+          <p id="last-load">Last load: N/A</p>
+          <p id="modified-molecule">Modified molecule: N/A</p>
+        </div>
 
-                <p>
-                    Those four lines are live. The demo subscribes to the molecule list, to atom-hover events,
-                    to file loading and to molecule changes, and writes whatever it receives into them.
-                </p>
+        <p>
+          Those four lines are live. The demo subscribes to the molecule list,
+          to atom-hover events, to file loading and to molecule changes, and
+          writes whatever it receives into them.
+        </p>
 
-                <p class="note">
-                    Loading a file updates the first and third lines: the count comes from the store, and the
-                    files-loaded callback reports the file names together with the optional <code>origin</code>
-                    label you pass to <code>loadFiles()</code>. The last line comes from the molecule-change
-                    callback, which also fires for edits you make in the viewer (mutate, refine, delete, and so
-                    on) and sometimes during loading, without an action and before the molecule is listed.
-                </p>
+        <p class="note">
+          Loading a file updates the first and third lines: the count comes from
+          the store, and the files-loaded callback reports the file names
+          together with the optional <code>origin</code> label you pass to
+          <code>loadFiles()</code>. The last line comes from the molecule-change
+          callback, which also fires for edits you make in the viewer (mutate,
+          refine, delete, and so on) and sometimes during loading, without an
+          action and before the molecule is listed.
+        </p>
 
-                <p>
-                    The menu bar is extended in two ways. An <em>Extra Menu</em> entry gets its own submenu, and a
-                    <em>Page controls</em> entry whose only item is an HTML slot: the slot is filled by markup
-                    placed inside the <code>&lt;moorhen-web-component&gt;</code> element, so those buttons are
-                    ordinary page DOM, styled by this page&rsquo;s CSS.
-                </p>
+        <p>
+          The menu bar is extended in two ways. An <em>Extra Menu</em> entry
+          gets its own submenu, and a <em>Page controls</em> entry whose only
+          item is an HTML slot: the slot is filled by markup placed inside the
+          <code>&lt;moorhen-web-component&gt;</code> element, so those buttons
+          are ordinary page DOM, styled by this page&rsquo;s CSS.
+        </p>
 
-                <pre class="code-block" data-lang="html"><code>&lt;moorhen-web-component id="moorhen-1"&gt;
+        <pre
+          class="code-block"
+          data-lang="html"
+        ><code>&lt;moorhen-web-component id="moorhen-1"&gt;
     &lt;div slot="page-controls" class="slot-controls"&gt;
         &lt;button id="slot-load-1bxn"&gt;Load 1BXN&lt;/button&gt;
         &lt;button id="slot-toggle-theme"&gt;Toggle theme&lt;/button&gt;
     &lt;/div&gt;
 &lt;/moorhen-web-component&gt;</code></pre>
 
-                <p class="note">
-                    <strong>Serving the page:</strong> Moorhen needs a cross-origin isolated page, and
-                    <code>vite.config.ts</code> already sets the two required headers for the dev server.
-                    Check <code>window.crossOriginIsolated</code> in the console: it must be
-                    <code>true</code>.
-                </p>
+        <p class="note">
+          <strong>Serving the page:</strong> Moorhen needs a cross-origin
+          isolated page, and <code>vite.config.ts</code> already sets the two
+          required headers for the dev server. Check
+          <code>window.crossOriginIsolated</code> in the console: it must be
+          <code>true</code>.
+        </p>
 
-                <p>
-                    See <code>src/main.ts</code> for the whole walkthrough, and the
-                    <a
-                        href="https://moorhen.hosted.york.ac.uk/docs/guides/developer/webcomponent-setup.html"
-                        >developer guide</a
-                    >
-                    for the same steps explained in prose.
-                </p>
-            </section>
-        </main>
+        <h2>A plugin: a modal of your own, with Moorhen&rsquo;s controls</h2>
 
-        <script type="module" src="/src/theme-toggle.ts"></script>
-        <script type="module" src="/src/main.ts"></script>
-    </body>
+        <p>
+          The <em>Plugin</em> menu entry opens a modal whose content is markup
+          of this page, given to Moorhen through a slot. The controls in it are
+          Moorhen&rsquo;s own, as custom elements defined by
+          <code>registerMoorhenWebComponent()</code>: they look like the rest of
+          Moorhen, follow its theme, and the molecule and chain lists show what
+          is loaded in it.
+        </p>
+
+        <pre
+          class="code-block"
+          data-lang="html"
+        ><code>&lt;moorhen-web-component id="moorhen-1"&gt;
+    &lt;div slot="example-plugin"&gt;
+        &lt;moorhen-toggle id="plugin-axes"&gt;Draw axes&lt;/moorhen-toggle&gt;
+        &lt;moorhen-slider id="plugin-zoom" label="Zoom" min="0.05" max="5" scale="log"&gt;&lt;/moorhen-slider&gt;
+        &lt;moorhen-molecule-select id="plugin-molecule" label="Molecule"&gt;&lt;/moorhen-molecule-select&gt;
+        &lt;moorhen-chain-select for="plugin-molecule" multiple label="Chains"&gt;&lt;/moorhen-chain-select&gt;
+    &lt;/div&gt;
+&lt;/moorhen-web-component&gt;</code></pre>
+
+        <pre
+          class="code-block"
+          data-lang="typescript"
+        ><code>moorhenInstance.uiExtensions.addModal({ id: "example-plugin", title: "Example plugin", slotName: "example-plugin" });
+moorhenInstance.menuSystem?.addMainMenu({ type: "modal", label: "Plugin", icon: "MatSymAdd", modal: "example-plugin" });
+
+// The controls work like &lt;input&gt;: properties for the value, `change` and `input` events
+const axes = document.getElementById("plugin-axes") as MoorhenToggleElement;
+axes.addEventListener("change", () =&gt; moorhenInstance.sceneSettings.setDrawAxes(axes.checked));
+// …and follow Moorhen, whatever changes the setting
+moorhenInstance.subscribeToStore(s =&gt; s.sceneSettings.drawAxes, drawAxes =&gt; (axes.checked = drawAxes));</code></pre>
+
+        <p>
+          The chain list follows the molecule select through its
+          <code>for</code> attribute, with no code. See
+          <code>src/plugin.ts</code> for the whole plugin.
+        </p>
+
+        <p>
+          The elements also work outside Moorhen: the
+          <strong>Spin</strong> switch and the <strong>Centre on</strong>
+          molecule list next to the buttons above are a
+          <code>&lt;moorhen-toggle&gt;</code> and a
+          <code>&lt;moorhen-molecule-select&gt;</code> in the page: the list
+          shows the molecules loaded in Moorhen, and picking one centres the
+          view on it. With a single Moorhen
+          in the page it finds it by itself; with several, give the id of one in
+          a <code>moorhen</code> attribute:
+          <code>&lt;moorhen-toggle moorhen="moorhen-1"&gt;</code>.
+        </p>
+
+        <p>
+          See <code>src/main.ts</code> for the whole walkthrough, and the
+          <a
+            href="https://moorhen.hosted.york.ac.uk/docs/guides/developer/webcomponent-setup.html"
+            >developer guide</a
+          >
+          for the same steps explained in prose.
+        </p>
+      </section>
+    </main>
+
+    <script type="module" src="/src/theme-toggle.ts"></script>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
 </html>

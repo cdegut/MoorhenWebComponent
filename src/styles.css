@@ -250,3 +250,11 @@ pre.code-block[data-lang="shell"]::before {
     font-family: var(--mono);
     font-size: 0.9em;
 }
+
+/* The example plugin's modal content (a slot of the web component): laid out by this page */
+.plugin {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 0.5rem;
+}
