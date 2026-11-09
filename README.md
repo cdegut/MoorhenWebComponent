@@ -99,3 +99,32 @@ vite.config.ts        dev server, including the cross-origin isolation headers
   - [Adding custom menus](https://moorhen.hosted.york.ac.uk/docs/guides/developer/webcomponent-menu.html)
   - [Callbacks and subscriptions](https://moorhen.hosted.york.ac.uk/docs/guides/developer/webcomponent-events.html)
 - [API reference](https://moorhen.hosted.york.ac.uk/docs/api/index.html)
+
+## Embedding in an iframe
+
+Moorhen's Coot worker always loads a pthreads WebAssembly build (`moorhen.js` / `moorhen64.js`).
+It has no single-threaded fallback, so the document that holds `<moorhen-web-component>` must be
+cross-origin isolated (`window.crossOriginIsolated === true`) even when it sits in an iframe. Without
+isolation, Moorhen does not throw an error: it hangs, and the console repeats
+`still waiting on run dependencies: loading-workers`.
+
+`iframe-host.html` and `iframe-embed.html` test this. Open `http://localhost:3000/iframe-host.html`,
+or run every scenario headless with `node scripts/iframe-test.mjs [chromium|firefox]` while
+`npm start` is running. Results with Chromium 156 and Firefox 153:
+
+| Parent page | Iframe | Chromium | Firefox |
+| --- | --- | --- | --- |
+| COOP + COEP | same-origin, COEP | works | works |
+| COOP + COEP | cross-origin, COEP + CORP, `allow="cross-origin-isolated"` | works | works |
+| COOP + COEP | cross-origin, COEP + CORP, no `allow` | **fails** | works |
+| no headers | COOP + COEP | **fails** | **fails** |
+| no headers | `Document-Isolation-Policy: isolate-and-require-corp` | works | **fails** |
+
+What to do:
+
+- **You control the parent page:** send COOP + COEP on it, send COEP (+ CORP if cross-origin) on the
+  iframe document, and set `allow="cross-origin-isolated"` on a cross-origin iframe. This works in
+  every browser.
+- **You don't control the parent page:** send `Document-Isolation-Policy: isolate-and-require-corp`
+  on the iframe document. Only Chromium 137+ supports it. In Firefox and Safari, open Moorhen in its
+  own tab or window instead.

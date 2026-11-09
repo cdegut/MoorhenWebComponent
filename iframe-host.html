@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Moorhen in an iframe: test host</title>
+    <style>
+      body { font-family: system-ui, sans-serif; margin: 1rem 2rem; }
+      ul { padding-left: 1.2rem; }
+      li { margin: 0.2rem 0; }
+      .current { font-weight: bold; }
+      dl { display: grid; grid-template-columns: max-content 1fr; gap: 0.2rem 1rem; }
+      dt { color: #666; }
+      #result.ok { color: #0a7a2f; font-weight: bold; }
+      #result.fail { color: #b3261e; font-weight: bold; }
+      iframe { width: 100%; height: 70vh; border: 2px solid #888; margin-top: 1rem; }
+    </style>
+  </head>
+  <body>
+    <h1>Moorhen web component inside an iframe</h1>
+    <ul id="scenarios"></ul>
+    <dl>
+      <dt>Scenario</dt><dd id="scenario"></dd>
+      <dt>Expected</dt><dd id="expected"></dd>
+      <dt>Parent crossOriginIsolated</dt><dd id="parent-coi"></dd>
+      <dt>Iframe src</dt><dd id="frame-src"></dd>
+      <dt>Result from iframe</dt><dd id="result">waiting…</dd>
+    </dl>
+    <div id="frame-container"></div>
+    <script type="module" src="/src/iframe-host.ts"></script>
+  </body>
+</html>

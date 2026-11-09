@@ -7,7 +7,8 @@
         "start": "vite",
         "build": "cp -r node_modules/moorhen/public/MoorhenAssets public/ && tsc && vite build",
         "preview": "vite preview",
-        "rebuild": "rm -rf node_modules/moorhen && rm -f package-lock.json && npm cache clean --force && npm install && cp -r node_modules/moorhen/public/MoorhenAssets public/. && vite"
+        "rebuild": "rm -rf node_modules/moorhen && rm -f package-lock.json && npm cache clean --force && npm install && cp -r node_modules/moorhen/public/MoorhenAssets public/. && vite",
+        "test:iframe": "node scripts/iframe-test.mjs"
     },
     "devDependencies": {
         "@types/node": "^20.5.1",
